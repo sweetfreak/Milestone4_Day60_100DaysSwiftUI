@@ -44,5 +44,5 @@ struct UserView: View {
 }
 
 #Preview {
-    UserView(user: User(id: "1", isActive: true, name: "Jesse", email: "Jesse@gmail.com", age: 32, company: "SelfEmployed", address: "1122 Boogie Woogie Avenue", about: "He's learning SwiftUI", registered:  "2015-11-10T01:47:18-00:00", tags: ["Friendly", "Smart", "LovesSwiftUI"], friends: [Friend(id: "1", name: "Max"), Friend(id: "2", name: "Zoe")]))
+    UserView(user: User(id: UUID(), isActive: true, name: "Jesse", email: "Jesse@gmail.com", age: 32, company: "SelfEmployed", address: "1122 Boogie Woogie Avenue", about: "He's learning SwiftUI", registered:  "2015-11-10T01:47:18-00:00", tags: ["Friendly", "Smart", "LovesSwiftUI"], friends: [Friend(id: UUID(), name: "Max"), Friend(id: UUID(), name: "Zoe")]))
 }

@@ -13,29 +13,50 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            List(users, id: \.id) { user in
-                VStack {
+            List(users/*, id: \.id*/) { user in
+                HStack {
+                    Circle()
+                        .fill(user.isActive ? .green : .red)
+                        .frame(width: 30)
+                    
                     NavigationLink(user.name) {
                         UserView(user:user)
-                    }.foregroundStyle(user.isActive ? .green : .red)
-                    
+                    }
+                    .foregroundStyle(user.isActive ? .green : .red)
+                    .font(.title2)
+                    }
                 }
-                    .font(.headline)
-              
+                .navigationTitle("Users")
+                .task {
+                    await loadData()
+                }
             }
-            .navigationTitle("Users")
-            .task {
-                await loadData()
-            }
-            
         }
-        
-        
-    }
+//        NavigationStack {
+//            List(users) { user in
+//                NavigationLink(value: user) {
+//                    HStack {
+//                        Circle()
+//                            .fill(user.isActive ? .green : .red)
+//                            .frame(width: 30)
+//
+//                        Text(user.name)
+//                    }
+//                }
+//            }
+//            .navigationTitle("Friendface")
+//            .navigationDestination(for: User.self) { user in
+//                Text(user.name)
+//            }
+//            .task {
+//                await loadData()
+//            }
+//        }
+//    }
     
     
     func loadData() async  {
-        if !users.isEmpty {
+        guard users.isEmpty else {
             return
         }
         
@@ -46,12 +67,16 @@ struct ContentView: View {
         
         do {
             let (data, _) = try await URLSession.shared.data(from: url)
+//            
+//            if let decodedResponse = try? JSONDecoder().decode([User].self, from: data) {
+//                users = decodedResponse
+//            }
             
-            if let decodedResponse = try? JSONDecoder().decode([User].self, from: data) {
-                users = decodedResponse
-                
-            }
-        } catch {
+            let decoder = JSONDecoder()
+            decoder.dateDecodingStrategy = .iso8601
+            users = try decoder.decode([User].self, from: data)
+            
+            } catch {
             print("Invalid Data")
         }
     }

@@ -29,5 +29,5 @@ struct FriendsView: View {
 }
 
 #Preview {
-    FriendsView(friends: [Friend(id: "1", name: "Jesse"), Friend(id: "2", name: "John")])
+    FriendsView(friends: [Friend(id: UUID(), name: "Jesse"), Friend(id: UUID(), name: "John")])
 }
