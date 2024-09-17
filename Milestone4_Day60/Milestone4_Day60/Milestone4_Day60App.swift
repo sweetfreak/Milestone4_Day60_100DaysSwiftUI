@@ -4,7 +4,7 @@
 //
 //  Created by Jesse Sheehan on 9/15/24.
 //
-
+import SwiftData
 import SwiftUI
 
 @main
@@ -13,5 +13,6 @@ struct Milestone4_Day60App: App {
         WindowGroup {
             ContentView()
         }
+        .modelContainer(for: User.self)
     }
 }

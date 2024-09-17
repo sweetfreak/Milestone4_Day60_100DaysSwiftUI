@@ -4,13 +4,13 @@
 //
 //  Created by Jesse Sheehan on 9/15/24.
 //
-
+import SwiftData
 import SwiftUI
 
 struct UserView: View {
 
     var user: User
-    let dateFormatter = ISO8601DateFormatter()
+    //let dateFormatter = ISO8601DateFormatter()
     
     var body: some View {
         NavigationStack() {
@@ -20,7 +20,7 @@ struct UserView: View {
                     Text("Age: \(user.age)")
                     Text("Company: \(user.company)")
                     Text("Address: \(user.address)")
-                    Text("Registration Date: \(dateFormatter.date (from: user.registered)!.formatted(date: .abbreviated, time: .omitted))")
+                    Text("Registration Date: \(user.registered.formatted(date: .abbreviated, time: .omitted))")
                 }
                 Section("About") {
                     Text(user.about)
@@ -44,5 +44,5 @@ struct UserView: View {
 }
 
 #Preview {
-    UserView(user: User(id: UUID(), isActive: true, name: "Jesse", email: "Jesse@gmail.com", age: 32, company: "SelfEmployed", address: "1122 Boogie Woogie Avenue", about: "He's learning SwiftUI", registered:  "2015-11-10T01:47:18-00:00", tags: ["Friendly", "Smart", "LovesSwiftUI"], friends: [Friend(id: UUID(), name: "Max"), Friend(id: UUID(), name: "Zoe")]))
+    UserView(user: User.example)
 }

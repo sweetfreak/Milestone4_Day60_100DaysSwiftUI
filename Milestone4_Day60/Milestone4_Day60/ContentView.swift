@@ -4,16 +4,19 @@
 //
 //  Created by Jesse Sheehan on 9/15/24.
 //
-
+import SwiftData
 import SwiftUI
 
 struct ContentView: View {
+    @Environment(\.modelContext) var modelContext
     
-    @State private var users = [User]()
+    //@State private var users = [User]()
+    @Query(sort: \User.name) private var users: [User]
+    
     
     var body: some View {
         NavigationStack {
-            List(users/*, id: \.id*/) { user in
+            List(users) { user in
                 HStack {
                     Circle()
                         .fill(user.isActive ? .green : .red)
@@ -29,6 +32,7 @@ struct ContentView: View {
                 .navigationTitle("Users")
                 .task {
                     await loadData()
+                    
                 }
             }
         }
@@ -60,21 +64,29 @@ struct ContentView: View {
             return
         }
         
-        guard let url = URL(string: "https://www.hackingwithswift.com/samples/friendface.json") else {
-            print("Invalid URL")
-            return
-        }
-        
         do {
+            let url = URL(string: "https://hws.dev/friendface.json")!
             let (data, _) = try await URLSession.shared.data(from: url)
-//            
+//
 //            if let decodedResponse = try? JSONDecoder().decode([User].self, from: data) {
 //                users = decodedResponse
 //            }
             
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601
-            users = try decoder.decode([User].self, from: data)
+            //users = try decoder.decode([User].self, from: data)
+            let downloadedUsers = try decoder.decode([User].self, from: data)
+            
+            //This code creates a new model context, but then you lose the auto-save feature. This will make the swiftData appear all at once instead of downloading and inserting itself, user by user
+            let insertContext = ModelContext(modelContext.container)
+            
+            //adds alls users to modelContext for SwiftData
+            for user in downloadedUsers {
+                //modelContext.insert(user)
+                insertContext.insert(user) //adds it to the newly created container
+            }
+            //ask insertContainer to save itself
+            try insertContext.save()
             
             } catch {
             print("Invalid Data")
